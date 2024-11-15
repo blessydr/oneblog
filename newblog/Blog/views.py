@@ -6,6 +6,7 @@ from .models import Blog_Post,Tag,Comments
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.db.models import Q
+from .utils import send_email
 
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -31,11 +32,13 @@ def register(request):
             user.last_name = lastname
             user.save()
 
-            
+            subject = 'Welcome to Our Blog!'
+            message = f'Hi {username}, thank you for registering on our blog website!'
+            send_email(subject, message, [email])
             login(request, user)  
             return redirect('home')
         
-    messages.success(request, "Account created successfully!")  
+            messages.success(request, "Account created successfully!")  
     return render(request,'blog/register.html')
             
 def user_login(request):
@@ -82,6 +85,10 @@ def create_blogs(request):
                 
         blog.save() 
         messages.success(request, "Your blog has been created successfully!")
+        subject = 'New Blog Post Created'
+        message = f'Hi {user.username}, your blog post "{title}" has been successfully created!'
+        send_email(subject, message, [user.email])
+        
 
         return redirect('blog_details', id=blog.id)
     

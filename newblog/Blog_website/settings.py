@@ -130,5 +130,5 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'blessy262004@gmail.com'  # Your email address
-EMAIL_HOST_PASSWORD = 'your-email-password'  # Your email password (consider using environment variables for security)
+EMAIL_HOST_PASSWORD = 'qpng guru wbaa mjtk'  # Your email password (consider using environment variables for security)
 DEFAULT_FROM_EMAIL = 'your-email@gmail.com'
