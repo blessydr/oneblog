@@ -1,0 +1,464 @@
+
+
+{% block content %}
+
+<style>
+    /* Basic styling for the home page */
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+        background-color: #e6e6fa; /* Light Lavender */
+        padding: 20px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        border-radius: 8px;
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    @media (max-width: 768px) {
+        header {
+            background-color: #dcdcf7; /* Lighter lavender on smaller screens */
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+        }
+    }
+
+    @media (max-width: 480px) {
+        header {
+            background-color: #ffffff; /* White on very small screens */
+            box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.08);
+        }
+    }
+
+    .header-content {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        margin-left: 10%;    }
+    
+    .header-actions {
+        margin-top: 30px;
+        display: flex;
+        align-items: center;
+        gap: 1%;
+    }
+    
+    /* Search Bar Styling */
+    .search-form {
+        display: flex;
+        align-items: center;
+    }
+    
+    .search-bar {
+        margin-bottom: 12px;
+        padding: 8px;
+        font-size: 16px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        width: 400px;
+    }
+    
+    .search-btn {
+        padding: 8px 15px;
+        margin-left: 10px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    
+    .search-btn:hover {
+        background-color: #0056b3;
+    }
+    
+    /* Create Blog Button */
+    .create-btn {
+        padding: 10px 20px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        text-decoration: none;
+        width: 200px;
+        margin-bottom: 15px;
+    }
+    
+    .create-btn:hover {
+        background-color: #218838;
+    }
+    
+    /* Posts Layout */
+    .latest-posts {
+        margin-top: 20px;
+    }
+    
+    .post-item {
+        margin-bottom: 20px;
+        padding: 15px;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+    
+    .post-item h3 {
+        margin-bottom: 10px;
+        color: #007bff;
+    }
+    
+    .post-item h3 a {
+        text-decoration: none;
+    }
+    
+    .post-item p {
+        font-size: 14px;
+        color: #555;
+    }
+    
+    .post-item p em {
+        font-size: 12px;
+        color: #888;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        /* Adjustments for mobile */
+        .header-content {
+            align-items: center;
+            text-align: center;
+        }
+    
+        .search-form {
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+    
+        .search-bar {
+            width: 80%;
+            margin-bottom: 10px;
+        }
+    
+        .search-btn {
+            width: 100%;
+        }
+    
+        .create-btn {
+            width: 100%;
+            margin-top: 10px;
+        }
+    }
+    /* Admin-only buttons for approving/rejecting posts */
+.approve-button,
+.reject-button {
+    text-decoration: none;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    margin-right: 10px;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+}
+
+.approve-button {
+    background-color: #28a745; /* Green for approval */
+}
+
+.approve-button:hover {
+    background-color: #218838;
+}
+
+.reject-button {
+    background-color: #e74c3c; /* Red for rejection */
+}
+
+.reject-button:hover {
+    background-color: #c0392b;
+}
+
+    @media (max-width: 480px) {
+        .search-bar {
+            width: 100%;
+        }
+    
+        .create-btn {
+            width: 100%;
+        }
+    }
+    .post-item {
+        padding: 15px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+
+    .post-actions {
+        margin-top: 10px;
+    }
+
+    .edit-button,
+    .delete-button {
+        text-decoration: none;
+        color: white;
+        padding: 8px 15px;
+        border-radius: 5px;
+        margin-right: 10px;
+        font-size: 14px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .edit-button {
+        background-color: #3498db;
+    }
+
+    .edit-button:hover {
+        background-color: #2980b9;
+    }
+
+    .delete-button {
+        background-color: #e74c3c;
+    }
+
+    .delete-button:hover {
+        background-color: #c0392b;
+    }
+
+    /* Ensure form buttons have no default styles */
+    form .delete-button {
+        display: inline-block;
+    }
+    button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    margin-bottom: 15px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Filter Form Styles */
+#filter-form {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+#filter-form label {
+    display: block;
+    margin: 10px 0 5px;
+    font-weight: bold;
+}
+
+#filter-form input,
+#filter-form select {
+    width: calc(100% - 20px);
+    padding: 8px 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#filter-form button {
+    background-color: #28a745;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+#filter-form button:hover {
+    background-color: #218838;
+}
+
+/* Blog Post Styles */
+.post-item {
+    background-color: #ffffff;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.3s ease;
+}
+
+.post-item:hover {
+    box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.15);
+}
+
+.post-item h3 {
+    margin-top: 0;
+    color: #333;
+    font-size: 1.5em;
+}
+
+.post-item p {
+    color: #666;
+}
+
+.post-item em {
+    font-style: italic;
+    color: #888;
+}
+
+/* Tag Styles */
+.tag {
+    display: inline-block;
+    color: #007bff;
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-size: 12px;
+ 
+}
+
+.tag:hover {
+    color: #0056b3;
+}
+.filter{
+    background-color: #007bff;
+    width: 100px;
+    height: 37px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+   
+}
+</style>
+{% include 'blog/navbar.html'%}
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <h2>Welcome to Our Blog</h2>
+                <div class="header-actions">
+                    <form action="{% url 'home' %}" method="get" class="search-form">
+                        <input type="text" name="search" placeholder="Search posts..." class="search-bar">
+                        <button type="submit" class="search-btn">Search</button>
+                    </form>
+                    <button class="filter" onclick="toggleFilter()" >Filter</button>
+
+                    <a href="{% url 'create_blog' %}" class="create-btn">Create Blog</a>
+                </div>
+
+            </div>
+        </header>
+
+        <!-- Collapsible filter form -->
+        <div id="filter-form" style="display:none;">
+            <form method="get" action="{% url 'home' %}">
+                <!-- Date Range Filter -->
+                <label for="from_date">From Date:</label>
+                <input type="date" id="from_date" name="from_date" value="{{ request.GET.from_date }}">
+        
+                <label for="to_date">To Date:</label>
+                <input type="date" id="to_date" name="to_date" value="{{ request.GET.to_date }}">
+        
+                <!-- Tags Filter -->
+                <label for="tags">Tags:</label>
+                <select id="tags" name="tags" multiple>
+                    {% for tag in available_tags %}
+                        <option value="{{ tag.name }}" {% if tag.name in request.GET.tags %}selected{% endif %}>{{ tag.name }}</option>
+                    {% endfor %}
+                </select>
+        
+                <button type="submit">Apply Filters</button>
+            </form>
+        </div>
+        
+        <!-- JavaScript to toggle the filter form -->
+        <script>
+            function toggleFilter() {
+                var filterForm = document.getElementById("filter-form");
+                if (filterForm.style.display === "none") {
+                    filterForm.style.display = "block";
+                } else {
+                    filterForm.style.display = "none";
+                }
+            }
+        </script>
+        
+        <p>Explore the latest blog posts:</p>
+        
+        <div class="latest-posts">
+            {% if blogs %}
+    {% for post in blogs %}
+        <div class="post-item">
+
+            <h3>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'blog_details' post.id %}">{{ post.title }}</a>
+                    {% else %}
+                        <a href="{% url 'login' %}">{{ post.title }}</a>
+                    {% endif %}
+            </h3>
+            <p>{{ post.content|truncatewords:30 }}</p>
+            <p>
+                <em>Posted by {{ post.author }} on {{ post.created_at|date:"F d, Y" }}</em>
+            </p>
+            <br>
+            <p>
+                <strong>Tags:</strong>
+                {% if post.tags.all %}
+                    {% for tag in post.tags.all %}
+                        <span class="tag">{{ tag.name }}</span>{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                {% else %}
+                    No tags available.
+                {% endif %}
+            </p>
+            {% if user.is_authenticated and user.is_staff %}
+    <div class="post-actions">
+        {% if not post.is_approved %}
+            <form action="{% url 'approve_blog' post.id %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="approve-button">Approve</button>
+            </form>
+            <form action="{% url 'reject_blog' post.id %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="reject-button">Reject</button>
+            </form>
+        {% else %}
+            <p class="approved-text">This post is approved.</p>
+        {% endif %}
+        {% if request.user == post.author or user.is_staff%}
+        <div class="post-actions">
+            <a href="{% url 'edit_blog' post.id %}" class="edit-button">Edit</a>
+            
+            <form action="{% url 'delete_blog' post.id %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="delete-button">Delete</button>
+            </form>
+        </div>
+    {% endif %}
+    </div>
+{% endif %}
+
+           
+        </div>
+        <hr>
+    {% endfor %}
+{% else %}
+    <p>No blog posts available yet.</p>
+{% endif %}
+
+        </div>
+    </div>
+{% endblock %}

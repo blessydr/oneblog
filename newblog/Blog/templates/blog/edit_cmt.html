@@ -1,0 +1,143 @@
+{%block content%}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Comment</title>
+<style>
+    /* Basic reset for better styling */
+body, h2, p, textarea, a, button {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #f9f9f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Container styling */
+.edit-comment-container {
+    background-color: #ffffff;
+    width: 400px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+h2 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Message styling */
+.messages {
+    margin-bottom: 15px;
+}
+
+.messages p {
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+.messages .success {
+    background-color: #e0f9e6;
+    color: #2d7d31;
+}
+
+.messages .error {
+    background-color: #f9e0e0;
+    color: #d32f2f;
+}
+
+/* Form styling */
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: vertical;
+}
+
+/* Button styling */
+.btn-save {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+    text-decoration: none;
+}
+
+.btn-save:hover {
+    background-color: #45a049;
+}
+
+.btn-cancel {
+    background-color: #f44336;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn-cancel:hover {
+    background-color: #d32f2f;
+}
+
+</style>
+</head>
+<body>
+    <div class="edit-comment-container">
+        <h2>Edit Your Comment</h2>
+        
+        <!-- Display error or success messages if any -->
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <p class="{{ message.tags }}">{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        <!-- Comment Edit Form -->
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="content">Edit Comment:</label>
+                <textarea id="content" name="content" rows="5">{{ comment.content }}</textarea>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn-save">Save Changes</button>
+                <a href="{% url 'blog_details' comment.blog.id %}" class="btn-cancel">Cancel</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+
+{%endblock%}
