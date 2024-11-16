@@ -244,8 +244,7 @@ def delete_cmt(request,id):
 def approve_blog(request, post_id):
     if request.user.is_staff:
         post = get_object_or_404(Blog_Post, id=post_id)
-        post.approval_status = 'approved'
-        
+        post.approval_status = 'approved'  # Set the status to 'approved'
         post.save()
         messages.success(request, 'Blog post approved successfully!')
     else:

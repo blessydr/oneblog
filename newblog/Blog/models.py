@@ -16,16 +16,18 @@ class Blog_Post(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     view_count = models.IntegerField(default=0)
     STATUS_CHOICES = (
-        ('approved', 'Approved'),
-        ('pending', 'Pending'),
-        ('rejected', 'Rejected'),
-    )
-    tags=models.ManyToManyField(Tag, related_name='blogs', blank=True)
+    ('approved', 'Approved'),
+    ('pending', 'Pending'),
+    ('rejected', 'Rejected'),
+)
     approval_status = models.CharField(
-        max_length=10,
-        choices=STATUS_CHOICES,
-        default='pending'
-    )
+    max_length=10,
+    choices=STATUS_CHOICES,
+    default='pending'  # Default to 'pending'
+)
+
+    tags=models.ManyToManyField(Tag, related_name='blogs', blank=True)
+  
     def __str__(self):
         return self.title
     
