@@ -15,10 +15,17 @@ class Blog_Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     view_count = models.IntegerField(default=0)
-    rejection_reason = models.TextField(null=True, blank=True)  # New field to track rejection reason
-
+    STATUS_CHOICES = (
+        ('approved', 'Approved'),
+        ('pending', 'Pending'),
+        ('rejected', 'Rejected'),
+    )
     tags=models.ManyToManyField(Tag, related_name='blogs', blank=True)
-    is_approved = models.BooleanField(default=False)
+    approval_status = models.CharField(
+        max_length=10,
+        choices=STATUS_CHOICES,
+        default='pending'
+    )
     def __str__(self):
         return self.title
     

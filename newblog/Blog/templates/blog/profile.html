@@ -190,13 +190,9 @@ p {
 
     <h1>User Profile: {{ user.first_name }} {{ user.last_name }}</h1>
     <p><strong>Email:</strong> {{ user.email }}</p>
-    {% if user.is_staff %}
-    <p><strong>Role:</strong> Admin</p>
-{% else %}
-    <p><strong>Role:</strong> Regular User</p>
-{% endif %}
-{% else %}
-<p>You need to log in to view your profile.</p>
+    
+
+
     {%endif%}
 
     

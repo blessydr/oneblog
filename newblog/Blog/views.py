@@ -175,7 +175,7 @@ def home(request):
     if request.user.is_superuser:
         blogs = Blog_Post.objects.all()
     else:
-        blogs = Blog_Post.objects.filter(is_approved=True)
+        blogs = Blog_Post.objects.filter(approval_status='approved')
 
     if search:
         blogs = blogs.filter(
@@ -239,22 +239,39 @@ def delete_cmt(request,id):
         return redirect('blog_details', id=id)
     
 
+
 @login_required
 def approve_blog(request, post_id):
-    if request.user.is_staff:  
+    if request.user.is_staff:
         post = get_object_or_404(Blog_Post, id=post_id)
-        post.is_approved = True
+        post.approval_status = 'approved'
+        
         post.save()
-    return redirect('home')        
+        messages.success(request, 'Blog post approved successfully!')
+    else:
+        messages.error(request, 'You do not have permission to approve posts.')
+    return redirect('home')
 
 
 @login_required
 def reject_blog(request, post_id):
-    if request.user.is_staff: 
+    if request.user.is_staff:
         post = get_object_or_404(Blog_Post, id=post_id)
-        post.delete() 
+        post.approval_status = 'rejected'  # Change approval status to rejected instead of deleting
+        post.save()
+        messages.success(request, 'Blog post rejected successfully!')
+    else:
+        messages.error(request, 'You do not have permission to reject posts.')
     return redirect('home')
 
+@login_required
+def pending_blog(request):
+    if request.user.is_staff:  # Make sure only staff can view pending posts
+        pending_posts = Blog_Post.objects.filter(approval_status='pending')
+        return render(request, 'blog/pending_posts.html', {'pending_posts': pending_posts})
+    else:
+        messages.error(request, 'You do not have permission to view pending posts.')
+        return redirect('home')
 
 
 def profile(request):
@@ -262,9 +279,9 @@ def profile(request):
         
     user_blogs = Blog_Post.objects.filter(author=user)
     total_posts =user_blogs.count()
-    approved_posts=user_blogs.filter(is_approved=True).count()
-    pending_posts= user_blogs.filter(is_approved=False).count()
-    rejected_posts = user_blogs.filter(is_approved=False).count()
+    approved_posts = user_blogs.filter(approval_status='approved').count()
+    pending_posts = user_blogs.filter(approval_status='pending').count()
+    rejected_posts = user_blogs.filter(approval_status='rejected').count()
     return render(request, 'blog/profile.html', {
             'user': user,
             'user_blogs':user_blogs,

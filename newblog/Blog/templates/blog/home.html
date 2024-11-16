@@ -427,7 +427,7 @@ button:hover {
             </p>
             {% if user.is_authenticated and user.is_staff %}
     <div class="post-actions">
-        {% if not post.is_approved %}
+        {% if post.approval_status == "pending" %}
             <form action="{% url 'approve_blog' post.id %}" method="post" style="display: inline;">
                 {% csrf_token %}
                 <button type="submit" class="approve-button">Approve</button>
