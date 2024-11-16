@@ -100,9 +100,35 @@
             margin-bottom: 10px;
         }
     }
+    
+/* Small and unique back button with light color */
+.back-button {
+    background-color: #f0f8ff; /* Light blue background */
+    color: #007bff;  /* Blue text color */
+    font-size: 0.875rem; /* Smaller text */
+    padding: 8px 16px; /* Smaller padding */
+    border: 1px solid #007bff; /* Border color matching text */
+    border-radius: 25px; /* Rounded corners for a unique look */
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.back-button:hover {
+    background-color: #e0f7fa; /* Slightly darker light blue background */
+    color: #0056b3; /* Darker blue text on hover */
+    transform: scale(1.1); /* Slight zoom effect */
+}
+
+.back-button:focus {
+    outline: none;
+}
+
 </style>
 
 <div class="edit-blog-container">
+    <button class="back-button" onclick="window.history.back()">Back</button>
+
     <h2>Edit Blog</h2>
     <form method="post">
         {% csrf_token %}

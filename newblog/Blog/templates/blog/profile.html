@@ -1,0 +1,247 @@
+{% block content %}
+
+<style>/* CSS for Profile Page */
+ /* General container styling */
+.container {
+    width: 90%;
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Header styles */
+h1 {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
+h2 {
+    font-size: 2rem;
+    color: #333;
+    margin-top: 30px;
+}
+
+/* Profile Info */
+p {
+    font-size: 1.1rem;
+    color: #555;
+    margin: 5px 0;
+}
+
+/* Stats Container */
+.stats-container {
+    margin-top: 30px;
+}
+
+.stats {
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.stat-item {
+    padding: 15px;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    width: 23%; /* Adjust width to fit within the container */
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.stat-item strong {
+    font-weight: bold;
+}
+
+.stat-item span {
+    font-size: 1.4rem;
+    display: block;
+    margin-top: 5px;
+}
+
+/* Color themes for different stats */
+.approved {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.rejected {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Blog Posts Section */
+.posts-list {
+    margin-top: 30px;
+}
+
+.post-item {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.post-item h3 {
+    font-size: 1.8rem;
+    color: #007bff;
+}
+
+.post-item p {
+    font-size: 1.1rem;
+    color: #555;
+    line-height: 1.5;
+}
+
+.post-item em {
+    font-size: 1rem;
+    color: #888;
+}
+
+/* Status label for blog posts */
+.post-item p strong {
+    font-weight: bold;
+}
+
+.post-item p span {
+    font-size: 1.1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .stats {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .stat-item {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    h1 {
+        font-size: 2rem; /* Smaller title on mobile */
+    }
+
+    h2 {
+        font-size: 1.5rem; /* Smaller subheading */
+    }
+
+    .posts-list {
+        margin-top: 20px;
+    }
+
+    .post-item {
+        padding: 15px;
+    }
+
+    .post-item h3 {
+        font-size: 1.6rem; /* Smaller post title */
+    }
+
+    .post-item p {
+        font-size: 1rem; /* Smaller paragraph text */
+    }
+}
+
+/* Small and unique back button with light color */
+.back-button {
+    background-color: #f0f8ff; /* Light blue background */
+    color: #007bff;  /* Blue text color */
+    font-size: 0.875rem; /* Smaller text */
+    padding: 8px 16px; /* Smaller padding */
+    border: 1px solid #007bff; /* Border color matching text */
+    border-radius: 25px; /* Rounded corners for a unique look */
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.back-button:hover {
+    background-color: #e0f7fa; /* Slightly darker light blue background */
+    color: #0056b3; /* Darker blue text on hover */
+    transform: scale(1.1); /* Slight zoom effect */
+}
+
+.back-button:focus {
+    outline: none;
+}
+
+
+    </style>
+
+<div class="container">
+    <button class="back-button" onclick="window.history.back()">Back</button>
+    {% if user.is_authenticated or user.is_staff %}
+
+    <h1>User Profile: {{ user.first_name }} {{ user.last_name }}</h1>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    {% if user.is_staff %}
+    <p><strong>Role:</strong> Admin</p>
+{% else %}
+    <p><strong>Role:</strong> Regular User</p>
+{% endif %}
+{% else %}
+<p>You need to log in to view your profile.</p>
+    {%endif%}
+
+    
+    <div class="stats-container">
+        <div class="stats">
+            <div class="stat-item approved">
+                <strong>Total Posts:</strong> <span>{{ total_posts }}</span>
+            </div>
+            <div class="stat-item approved">
+                <strong>Approved Posts:</strong> <span>{{ approved_posts }}</span>
+            </div>
+            <div class="stat-item pending">
+                <strong>Pending Posts:</strong> <span>{{ pending_posts }}</span>
+            </div>
+            <div class="stat-item rejected">
+                <strong>Rejected Posts:</strong> <span>{{ rejected_posts }}</span>
+            </div>
+        </div>
+    </div>
+    
+    
+
+    <h2>Your Blog Posts</h2>
+    {% if user_blogs %}
+        <div class="posts-list">
+            {% for post in user_blogs %}
+                <div class="post-item">
+                    <h3>
+                        <a href="{% url 'blog_details' post.id %}">{{ post.title }}</a>
+                    </h3>
+                    <p>{{ post.content|truncatewords:30 }}</p>
+                    <p><em>Posted on {{ post.created_at|date:"F d, Y" }}</em></p>
+                    <p><strong>Status:</strong> 
+                        {% if post.is_approved %}
+                            Approved
+                        {% else %}
+                            Pending
+                        {% endif %}
+                    </p>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>You have not posted any blogs yet.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

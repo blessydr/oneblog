@@ -16,5 +16,6 @@ urlpatterns = [
     path('comment/delete/<int:id>/', views.delete_cmt, name='delete_comment'),
     path('approve/<int:post_id>/', views.approve_blog, name='approve_blog'),
     path('reject/<int:post_id>/', views.reject_blog, name='reject_blog'),
-    
+        path('profile/', views.profile, name='profile'),
+
 ]

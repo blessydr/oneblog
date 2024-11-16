@@ -14,6 +14,9 @@ class Blog_Post(models.Model):
     author=models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    view_count = models.IntegerField(default=0)
+    rejection_reason = models.TextField(null=True, blank=True)  # New field to track rejection reason
+
     tags=models.ManyToManyField(Tag, related_name='blogs', blank=True)
     is_approved = models.BooleanField(default=False)
     def __str__(self):

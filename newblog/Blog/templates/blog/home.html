@@ -395,8 +395,9 @@ button:hover {
             }
         </script>
         
-        <p>Explore the latest blog posts:</p>
-        
+        <p>Explore the latest blog posts:</p><br>
+        <p><strong>Total Posts:</strong> {{ blogs|length }}</p>
+
         <div class="latest-posts">
             {% if blogs %}
     {% for post in blogs %}

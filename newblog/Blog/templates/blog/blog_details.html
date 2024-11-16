@@ -30,15 +30,9 @@
 
     .back-button a {
         text-decoration: none;
-        color: white;
-        background-color: #3498db;
-        padding: 10px 20px;
-        border-radius: 5px;
+      
     }
 
-    .back-button a:hover {
-        background-color: #2980b9;
-    }
 
 
     /* Comment Section */
@@ -189,9 +183,36 @@ button:hover {
 li {
     margin-bottom: 20px;
 }
+/* Small and unique back button with light color */
+.back-button {
+    background-color: #f0f8ff; /* Light blue background */
+    color: #007bff;  /* Blue text color */
+   
+    padding: 6px 12px; /* Smaller padding */
+    width: 100px;
+    border: 1px solid #007bff; /* Border color matching text */
+    border-radius: 25px; /* Rounded corners for a unique look */
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.back-button:hover {
+    background-color: #e0f7fa; /* Slightly darker light blue background */
+    color: #0056b3; /* Darker blue text on hover */
+    transform: scale(1.05); /* Slight zoom effect */
+}
+
+.back-button:focus {
+    outline: none;
+}
+
 </style>
 
 <div class="blog-details">
+
+    <p><strong>Views:</strong> {{ blogs.view_count }}</p>
+
     <h2>{{ blogs.title }}</h2>
     <p class="author">By {{ blogs.author }} | {{ blogs.created_at|date:"F d, Y" }}</p>
     

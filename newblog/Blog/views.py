@@ -23,7 +23,7 @@ def register(request):
         if password1==password2:
             messages.error(request,'Password does not match!')
         if User.objects.filter(username=username).exists():
-            messages.error('username already exists ')
+            messages.error(request,'username already exists ')
             return redirect('signup')
         
         else:
@@ -31,14 +31,16 @@ def register(request):
             user.first_name = firstname
             user.last_name = lastname
             user.save()
-
+            
             subject = 'Welcome to Our Blog!'
             message = f'Hi {username}, thank you for registering on our blog website!'
             send_email(subject, message, [email])
+            
             login(request, user)  
+            messages.success(request, "Account created successfully!")  
             return redirect('home')
         
-            messages.success(request, "Account created successfully!")  
+    
     return render(request,'blog/register.html')
             
 def user_login(request):
@@ -70,9 +72,11 @@ def create_blogs(request):
             title=title, 
             content=content, 
             author=author, 
-                                        created_at=timezone.now(),
-                                                is_approved=is_approved
+            created_at=timezone.now(),
+             is_approved=is_approved
 )
+        
+        
         
         if tags:
             for tag_id in tags:
@@ -86,8 +90,8 @@ def create_blogs(request):
         blog.save() 
         messages.success(request, "Your blog has been created successfully!")
         subject = 'New Blog Post Created'
-        message = f'Hi {user.username}, your blog post "{title}" has been successfully created!'
-        send_email(subject, message, [user.email])
+        message = f'Hi {blog.author}, your blog post "{title}" has been successfully created!'
+        send_email(subject, message, [request.user.email])
         
 
         return redirect('blog_details', id=blog.id)
@@ -99,6 +103,8 @@ def create_blogs(request):
 def blog_details(request,id):
     blog=get_object_or_404(Blog_Post,id=id)
     comments = Comments.objects.filter(blog=blog)
+    blog.view_count += 1
+    blog.save()
     user_cmt=False
     if request.user.is_authenticated:
         user_cmt=blog.comments.filter(author=request.user).exists()
@@ -249,3 +255,21 @@ def reject_blog(request, post_id):
         post.delete() 
     return redirect('home')
 
+
+
+def profile(request):
+    user=request.user
+        
+    user_blogs = Blog_Post.objects.filter(author=user)
+    total_posts =user_blogs.count()
+    approved_posts=user_blogs.filter(is_approved=True).count()
+    pending_posts= user_blogs.filter(is_approved=False).count()
+    rejected_posts = user_blogs.filter(is_approved=False).count()
+    return render(request, 'blog/profile.html', {
+            'user': user,
+            'user_blogs':user_blogs,
+            'total_posts':total_posts,
+            'approved_posts': approved_posts,
+            'pending_posts': pending_posts,
+            'rejected_posts': rejected_posts,
+        })
